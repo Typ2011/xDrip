@@ -2478,21 +2478,25 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
         UndoRedo.purgeQueues();
 
         if (UndoRedo.undoListHasItems()) {
+            ((View) btnUndo.getParent()).setVisibility(View.VISIBLE);
             btnUndo.setVisibility(View.VISIBLE);
             findViewById(R.id.labelUndo).setVisibility(View.VISIBLE);
             showcasemenu(SHOWCASE_UNDO);
         } else {
             btnUndo.setVisibility(View.INVISIBLE);
             findViewById(R.id.labelUndo).setVisibility(View.INVISIBLE);
+            ((View) btnUndo.getParent()).setVisibility(View.GONE); // free its weight so the bar re-spreads
         }
 
         if (UndoRedo.redoListHasItems()) {
+            ((View) btnRedo.getParent()).setVisibility(View.VISIBLE);
             btnRedo.setVisibility(View.VISIBLE);
             findViewById(R.id.labelRedo).setVisibility(View.VISIBLE);
             showcasemenu(SHOWCASE_REDO);
         } else {
             btnRedo.setVisibility(View.INVISIBLE);
             findViewById(R.id.labelRedo).setVisibility(View.INVISIBLE);
+            ((View) btnRedo.getParent()).setVisibility(View.GONE); // free its weight so the bar re-spreads
         }
 
         final DexCollectionType collector = DexCollectionType.getDexCollectionType();
