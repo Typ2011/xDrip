@@ -194,6 +194,7 @@ android {
             // the build automatically avoids legacy multidex when deploying to a device running
             // API level 21 or higher—regardless of what you set as your minSdkVersion.
             minSdkVersion 26
+            applicationIdSuffix ".redesign" // side-by-side install next to the live xDrip
             versionNameSuffix "-dev"
             buildConfigField "int", "buildVersion", "2021010100"
             buildConfigField "String", "buildUUID", "\"0f79a60a-5616-99be-8eb1-a430edcfd9fd\""

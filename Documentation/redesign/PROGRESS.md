@@ -18,7 +18,7 @@ Last updated: 2026-10-28
 
 | Phase | State | Branch |
 |---|---|---|
-| 0. Foundation (deps + baseline) | **Done** (build + unit tests pass; not yet run on a device) | `redesign/phase-0-foundation` |
+| 0. Foundation (deps + baseline) | **Done** (build + unit tests pass; emulator smoke test OK: Snackbar, Reminders FAB) | `redesign/phase-0-foundation` |
 | 1. Tokens | Next | - |
 | 2. Theme | Todo | - |
 | 3. Home layout | Todo (make mock-ups first with `imagegen-frontend-mobile`) | - |
@@ -50,7 +50,7 @@ Transitively resolved: core 1.13.0, fragment 1.5.4.
 
 ## Open items / next steps
 
-1. **Device smoke test of the Phase 0 APK.** Don't install it over the live xDrip: different signing key, and uninstalling wipes data. Plan: add `applicationIdSuffix ".redesign"` to the `fast` flavor for a side-by-side install, with alerts off or a different data source in the test app (otherwise both apps poll Share and alert twice). Check:
+1. **Done (2026-10-28, Windows emulator):** `fast` flavor now has `applicationIdSuffix ".redesign"` (plus `app/src/fast/google-services.json` with the renamed package). Gradle needs JDK 17-24 (JDK 25 fails; use `~/.jdks/jbr-21.0.11` and set Gradle JDK in Android Studio). Original plan: Don't install it over the live xDrip: different signing key, and uninstalling wipes data. Plan: add `applicationIdSuffix ".redesign"` to the `fast` flavor for a side-by-side install, with alerts off or a different data source in the test app (otherwise both apps poll Share and alert twice). Check:
    - The Snackbar on Home (`Home.java` ~L3676, uses `com.google.android.material.R.id.snackbar_text/snackbar_action`).
    - The `FloatingActionButton` in `res/layout/activity_reminders.xml:50`.
    - Both currently run under the `Theme.AppCompat` parent.
