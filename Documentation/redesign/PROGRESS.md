@@ -21,7 +21,7 @@ Last updated: 2026-10-28
 | 0. Foundation (deps + baseline) | **Done** (build + unit tests pass; emulator smoke test OK: Snackbar, Reminders FAB) | `redesign/phase-0-foundation` |
 | 1. Tokens | **Done** (`xd_*` colors + dimens added, resources compile; nothing uses them yet) | `redesign/phase-1-tokens` |
 | 2. Theme | **Done** (builds; not verified on emulator) | `redesign/phase-2-theme` |
-| 3. Home layout | Todo (make mock-ups first with `imagegen-frontend-mobile`) | - |
+| 3. Home layout | **Done** (builds; not verified on emulator) | `redesign/phase-3-home` |
 | 4. Drawer + overflow menu | Todo | - |
 | 5. Dialogs | Todo | - |
 | 6. Settings | Todo | - |
@@ -29,6 +29,14 @@ Last updated: 2026-10-28
 | 8. Graph, widgets, notifications | Todo | - |
 | 9. Wear | Later | - |
 
+### Phase 3 result
+- Home is now the approved variant C "glance panel" (`activity_home.xml` rewritten as a vertical LinearLayout; all view IDs, databinding variables and handlers kept). Order: toolbar, low-prediction banner (GONE unless active), glance panel (value 112sp + trend arrow, `notices` = minutes ago / delta / alert-disabled text, extra status line, battery/sensor-age row), HR/steps/vehicle chips, nano/expiry/wizard rows, segmented time range, chart (+ treatment overlay), preview chart (64dp), labelled bottom bar (Treatment, Note, Undo, Redo).
+- Panel tint: `Home.tintGlancePanel(colorRes)` called from the existing low/high/in-range branch in `displayCurrentInfoFromReading` (xd_urgent / xd_warn / xd_ok); neutral (0) when there is no reading.
+- Treatment: bottom-bar `btnTreatment` keeps tap = type, long-press = voice. Pending values/approve/cancel/time/insulin 0-3/blood test/carbs live in `treatment_card`, an overlay on the chart, shown by `syncTreatmentCard()` (called from `hideAllTreatmentButtons` and when cancel becomes visible). No handlers changed.
+- Chips: vehicle, HR and steps are under the panel; their hide state changed INVISIBLE to GONE in Home so the row stays centred. Time buttons: same IDs, binding, long-press lock; reordered 3/6/12/24 and restyled.
+- Chart dots: only the DEFAULTS in `xdrip_plus_prefs.xml` changed (high #ffc233, in-range #3ddc84, low #ff5c5c; bg text high/low likewise). No chart code touched, user overrides still win. Existing installs that already stored the old defaults keep the old blue/orange until "revert to default" is used.
+- `HomeLayoutAnchorTest.sensorAgeViewStillHasAnEndAnchor` updated (no RelativeLayout anchors any more; now asserts libstatus sits in a horizontal row).
+- Deviations / risks: no separate "urgent high" or "alerts disabled" banner (those strings are written into `notices` by Home, so they show inside the panel); undo/redo labels toggle with their buttons via two added lines; tall treatment card (up to 4 rows) may cover most of the chart on small screens; chips use MaterialButton `app:icon` (needs checking they inflate as such); big 112sp value is not auto-shrunk (long strings like "p" prefix or 4-digit mg/dl may clip; Home still shrinks to 25sp on small_screen); not run on an emulator.
 ### Phase 2 result
 - `AppTheme` now extends `Theme.Material3.Dark` (with action bar, because Home, Reminders, ProfileEditor and others use the support ActionBar), mapped to `xd_*` tokens; window, status and navigation bars are `xd_bg`. Old `colorPrimary/Dark/Accent` resources kept.
 - `AppThemeToolBarLite` (set via `setTheme` in Home, Reminders, InstallPebbleWatchFace) now extends `AppTheme` with the action bar disabled. `AppThemeReference`, `AppThemeToolBar`, `StatisticsWhiteTheme`, `PopUpKeypad`, `OldAppTheme*`, showcase themes untouched.

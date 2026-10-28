@@ -48,24 +48,24 @@ public class HomeLayoutAnchorTest {
         }
     }
 
-    /** The sensor age view still anchors to something, so the removal cannot quietly unanchor it. */
+    /** The sensor age view still sits in the horizontal status row (glance panel layout has no anchor chain). */
     @Test
     public void sensorAgeViewStillHasAnEndAnchor() throws Exception {
         // :: Setup
         val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(locateLayout());
 
         // :: Act
-        String anchor = null;
+        String orientation = null;
         val elements = document.getElementsByTagName("*");
         for (int i = 0; i < elements.getLength(); i++) {
             val element = (Element) elements.item(i);
             if ("@+id/libstatus".equals(element.getAttribute("android:id"))) {
-                anchor = element.getAttribute("android:layout_toEndOf");
+                orientation = ((Element) element.getParentNode()).getAttribute("android:orientation");
             }
         }
 
         // :: Verify
-        assertWithMessage("the sensor age view exists and carries an end anchor").that(anchor).isNotEmpty();
+        assertWithMessage("the sensor age view exists in a horizontal status row").that(orientation).isEqualTo("horizontal");
     }
 
     private static Set<String> collectDefinedIds(Document document) {
