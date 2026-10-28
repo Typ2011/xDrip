@@ -607,16 +607,42 @@
                     android:id="@+id/fab_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
+                    android:layout_gravity="bottom|start"
                     android:layout_margin="16dp"
                     android:gravity="bottom"
                     android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/btnNote"
+                            style="@style/XdFabSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/xd_space_2"
+                            android:contentDescription="Add note"
+                            android:onClick="showNoteTextInputDialog"
+                            app:srcCompat="@drawable/ic_note_plus_grey600_24dp" />
+
+                        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                            android:id="@+id/btnTreatment"
+                            style="@style/XdFabExtended"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/speaktreatment"
+                            android:text="@string/xd_bar_treatment"
+                            app:icon="@drawable/ic_eyedropper_variant_grey600_24dp" />
+                    </LinearLayout>
 
                     <!-- undo / redo pill: each half is GONE in Home when not available -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/xd_space_2"
+                        android:layout_marginStart="@dimen/xd_space_2"
                         android:layout_marginBottom="4dp"
                         android:background="@drawable/bg_xd_card"
                         android:orientation="horizontal">
@@ -670,32 +696,6 @@
                                 android:textColor="@color/xd_text_dim"
                                 android:textSize="12sp" />
                         </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/btnNote"
-                            style="@style/XdFabSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/xd_space_2"
-                            android:contentDescription="Add note"
-                            android:onClick="showNoteTextInputDialog"
-                            app:srcCompat="@drawable/ic_note_plus_grey600_24dp" />
-
-                        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                            android:id="@+id/btnTreatment"
-                            style="@style/XdFabExtended"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:contentDescription="@string/speaktreatment"
-                            android:text="@string/xd_bar_treatment"
-                            app:icon="@drawable/ic_eyedropper_variant_grey600_24dp" />
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
