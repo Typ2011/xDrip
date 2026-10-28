@@ -89,6 +89,8 @@
                     android:id="@+id/layoutCurrentBgValueRealTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-12dp"
+                    android:paddingStart="@dimen/xd_space_3"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -107,7 +109,7 @@
                         android:id="@+id/trendArrow"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
-                        android:layout_marginStart="@dimen/xd_space_2"
+                        android:layout_marginStart="@dimen/xd_space_1"
                         android:background="@android:color/transparent"
                         android:contentDescription="@null"
                         android:scaleType="fitCenter"
@@ -120,6 +122,7 @@
                     android:id="@+id/notices"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-34dp"
                     android:background="@android:color/transparent"
                     android:gravity="center_horizontal"
                     android:text="@string/alerts"
