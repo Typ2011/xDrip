@@ -19,7 +19,7 @@ Last updated: 2026-10-28
 | Phase | State | Branch |
 |---|---|---|
 | 0. Foundation (deps + baseline) | **Done** (build + unit tests pass; emulator smoke test OK: Snackbar, Reminders FAB) | `redesign/phase-0-foundation` |
-| 1. Tokens | Next | - |
+| 1. Tokens | **Done** (`xd_*` colors + dimens added, resources compile; nothing uses them yet) | `redesign/phase-1-tokens` |
 | 2. Theme | Todo | - |
 | 3. Home layout | Todo (make mock-ups first with `imagegen-frontend-mobile`) | - |
 | 4. Drawer + overflow menu | Todo | - |

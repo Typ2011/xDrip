@@ -11,4 +11,20 @@
     <color name="title">#62a262</color>
     <color name="yellow100">#fff9c4</color>
     <color name="darker_white">#d3d3d3</color>
+
+    <!-- Redesign tokens, same values as cgm-remote-monitor static/css/tokens.css (dark) -->
+    <color name="xd_bg">#0b0d10</color>
+    <color name="xd_surface">#14181d</color>
+    <color name="xd_surface_2">#1c2127</color>
+    <color name="xd_border">#2a313a</color>
+    <color name="xd_text">#e8ecf0</color>
+    <color name="xd_text_dim">#9aa5b1</color>
+    <color name="xd_ok">#3ddc84</color>
+    <color name="xd_warn">#ffc233</color>
+    <color name="xd_urgent">#ff5c5c</color>
+    <color name="xd_info">#4aa8ff</color>
+    <color name="xd_on_accent">#0b0d10</color>
+    <color name="xd_chart_bg">#111418</color>
+    <color name="xd_chart_fg">#e8ecf0</color>
+    <color name="xd_chart_grid">#3a424c</color>
 </resources>
