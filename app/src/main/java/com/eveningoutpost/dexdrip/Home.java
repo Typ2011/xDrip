@@ -285,6 +285,8 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
     private TextView uploaderBattery;
     private TextView sensorAge;
     private TextView currentBgValueText;
+    private View glancePanel; // tinted by glucose state
+    private View treatmentCard; // pending treatment confirm card
     private TextView notificationText;
     private TextView extraStatusLineText;
     private boolean alreadyDisplayedBgInfoCommon = false;
@@ -468,6 +470,8 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
         this.btnRedo = (ImageButton) findViewById(R.id.btnRedo);
         this.btnVehicleMode = (ImageButton) findViewById(R.id.vehicleModeButton);
 
+        glancePanel = findViewById(R.id.glance_panel);
+        treatmentCard = findViewById(R.id.treatment_card);
         hideAllTreatmentButtons();
 
         if (searchWords == null) {
@@ -865,6 +869,28 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
         }
     }
 
+    // the confirm card only shows while a treatment is pending
+    private void syncTreatmentCard() {
+        if (treatmentCard != null) {
+            treatmentCard.setVisibility((btnApprove.getVisibility() == View.VISIBLE || btnCancel.getVisibility() == View.VISIBLE) ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    // tint the glance panel by glucose state: xd_ok / xd_warn / xd_urgent, or 0 for neutral
+    private void tintGlancePanel(@androidx.annotation.ColorRes final int zoneColor) {
+        if (glancePanel == null) return;
+        final android.graphics.drawable.GradientDrawable bg = (android.graphics.drawable.GradientDrawable) glancePanel.getBackground().mutate();
+        final int stroke = (int) (getResources().getDisplayMetrics().density);
+        if (zoneColor == 0) {
+            bg.setColor(ContextCompat.getColor(this, R.color.xd_surface));
+            bg.setStroke(stroke, ContextCompat.getColor(this, R.color.xd_border));
+        } else {
+            final int c = ContextCompat.getColor(this, zoneColor);
+            bg.setColor(androidx.core.graphics.ColorUtils.compositeColors(androidx.core.graphics.ColorUtils.setAlphaComponent(c, 0x2A), ContextCompat.getColor(this, R.color.xd_surface)));
+            bg.setStroke(stroke, androidx.core.graphics.ColorUtils.setAlphaComponent(c, 0x99));
+        }
+    }
+
     private void cancelTreatment() {
         hideAllTreatmentButtons();
         WatchUpdaterService.sendWearToast(gs(R.string.treatment_cancelled), Toast.LENGTH_SHORT);
@@ -1198,6 +1224,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
         voiceRecognitionText.setVisibility(View.INVISIBLE);
         textTime.setVisibility(View.INVISIBLE);
         btnTime.setVisibility(View.INVISIBLE);
+        syncTreatmentCard();
 
         // zeroing code could be functionalized
         thiscarbsnumber = 0;
@@ -1678,6 +1705,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
 
         if ((insulinsumset || glucoseset || carbsset || timeset) && !watchkeypad) {
             btnCancel.setVisibility(View.VISIBLE);
+            syncTreatmentCard();
             if (chart != null) {
                 chart.setAlpha((float) 0.10);
             }
@@ -2409,7 +2437,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
             // TODO this can be done with PrefsView binding
             stepsButton.setAlpha(Pref.getBoolean("show_pebble_movement_line", true) ? 1.0f : 0.3f);
         } else {
-            stepsButton.setVisibility(View.INVISIBLE);
+            stepsButton.setVisibility(View.GONE);
         }
 
         final HeartRate hr = HeartRate.last();
@@ -2419,7 +2447,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
             // TODO this can be done with PrefsView binding
             bpmButton.setAlpha(Pref.getBoolean("show_pebble_movement_line", true) ? 1.0f : 0.3f);
         } else {
-            bpmButton.setVisibility(View.INVISIBLE);
+            bpmButton.setVisibility(View.GONE);
         }
     }
 
@@ -2451,16 +2479,20 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
 
         if (UndoRedo.undoListHasItems()) {
             btnUndo.setVisibility(View.VISIBLE);
+            findViewById(R.id.labelUndo).setVisibility(View.VISIBLE);
             showcasemenu(SHOWCASE_UNDO);
         } else {
             btnUndo.setVisibility(View.INVISIBLE);
+            findViewById(R.id.labelUndo).setVisibility(View.INVISIBLE);
         }
 
         if (UndoRedo.redoListHasItems()) {
             btnRedo.setVisibility(View.VISIBLE);
+            findViewById(R.id.labelRedo).setVisibility(View.VISIBLE);
             showcasemenu(SHOWCASE_REDO);
         } else {
             btnRedo.setVisibility(View.INVISIBLE);
+            findViewById(R.id.labelRedo).setVisibility(View.INVISIBLE);
         }
 
         final DexCollectionType collector = DexCollectionType.getDexCollectionType();
@@ -2555,7 +2587,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
         // TODO we need to consider noise level?
         // when to raise the alarm
         lowPredictText.setText("");
-        lowPredictText.setVisibility(View.INVISIBLE);
+        lowPredictText.setVisibility(View.GONE);
         if (BgGraphBuilder.low_occurs_at > 0) {
 
             double low_predicted_alarm_minutes;
@@ -2605,7 +2637,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
         if (ActivityRecognizedService.is_in_vehicle_mode()) {
             btnVehicleMode.setVisibility(View.VISIBLE);
         } else {
-            btnVehicleMode.setVisibility(View.INVISIBLE);
+            btnVehicleMode.setVisibility(View.GONE);
         }
 
         //if (isG5Share) showcasemenu(SHOWCASE_G5FIRMWARE); // nov 2016 firmware warning resolved 15/12/2016
@@ -3035,6 +3067,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
 
             if (!displayCurrentInfoFromReading(lastBgReading, predictive)) {
                 currentBgValueText.setText("");
+                tintGlancePanel(0);
                 display_delta = "";
                 if (itr != null) {
                     itr.update(null); // hide graphical arrow
@@ -3042,6 +3075,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
             }
         } else {
             currentBgValueText.setText(""); // clear value if no reading
+            tintGlancePanel(0);
             display_delta = "";
         }
 
@@ -3174,10 +3208,13 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
             }
         }
         if (bgGraphBuilder.unitized(estimate) <= bgGraphBuilder.lowMark) {
+            tintGlancePanel(R.color.xd_urgent);
             currentBgValueText.setTextColor(getCol(ColorCache.X.color_low_bg_values));
         } else if (bgGraphBuilder.unitized(estimate) >= bgGraphBuilder.highMark) {
+            tintGlancePanel(R.color.xd_warn);
             currentBgValueText.setTextColor(getCol(ColorCache.X.color_high_bg_values));
         } else {
+            tintGlancePanel(R.color.xd_ok);
             currentBgValueText.setTextColor(getCol(ColorCache.X.color_inrange_bg_values));
         }
 
