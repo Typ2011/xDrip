@@ -239,7 +239,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
     private BroadcastReceiver newDataReceiver;
     private BroadcastReceiver statusReceiver;
     public LineChartView chart;
-    private ImageButton btnSpeak;
+    private View btnSpeak;
     private ImageButton btnNote;
     private ImageButton btnApprove;
     private ImageButton btnCancel;
@@ -286,6 +286,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
     private TextView sensorAge;
     private TextView currentBgValueText;
     private View glancePanel; // tinted by glucose state
+    private View fabContainer; // floating actions, hidden while the treatment card shows
     private View treatmentCard; // pending treatment confirm card
     private TextView notificationText;
     private TextView extraStatusLineText;
@@ -472,6 +473,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
 
         glancePanel = findViewById(R.id.glance_panel);
         treatmentCard = findViewById(R.id.treatment_card);
+        fabContainer = findViewById(R.id.fab_container);
         hideAllTreatmentButtons();
 
         if (searchWords == null) {
@@ -480,7 +482,7 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
         if (insulins == null)   // TODO only when using multiples?
             insulins = InsulinManager.getDefaultInstance();
 
-        this.btnSpeak = (ImageButton) findViewById(R.id.btnTreatment);
+        this.btnSpeak = findViewById(R.id.btnTreatment);
         btnSpeak.setOnClickListener(v -> promptTextInput());
         btnSpeak.setOnLongClickListener(v -> {
             promptSpeechInput();
@@ -872,7 +874,9 @@ public class Home extends ActivityWithMenu implements ActivityCompat.OnRequestPe
     // the confirm card only shows while a treatment is pending
     private void syncTreatmentCard() {
         if (treatmentCard != null) {
-            treatmentCard.setVisibility((btnApprove.getVisibility() == View.VISIBLE || btnCancel.getVisibility() == View.VISIBLE) ? View.VISIBLE : View.GONE);
+            final boolean pending = btnApprove.getVisibility() == View.VISIBLE || btnCancel.getVisibility() == View.VISIBLE;
+            treatmentCard.setVisibility(pending ? View.VISIBLE : View.GONE);
+            if (fabContainer != null) fabContainer.setVisibility(pending ? View.GONE : View.VISIBLE);
         }
     }
 

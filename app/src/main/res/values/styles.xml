@@ -150,4 +150,17 @@
     <style name="WhiteActionBar.Subtitle">
         <item name="android:textColor">@android:color/black</item>
     </style>
+    <!-- Home floating actions (xd tokens) -->
+    <style name="XdFabExtended" parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
+        <item name="backgroundTint">@color/xd_info</item>
+        <item name="iconTint">@color/xd_on_accent</item>
+        <item name="android:textColor">@color/xd_on_accent</item>
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <style name="XdFabSmall" parent="Widget.Material3.FloatingActionButton.Secondary">
+        <item name="fabSize">mini</item>
+        <item name="backgroundTint">@color/xd_surface</item>
+        <item name="tint">@color/xd_text</item>
+    </style>
 </resources>
