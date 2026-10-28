@@ -58,3 +58,5 @@ patches/
 *.exe
 *.iml
 .claude/
+.codeseeker/
+.serena/
