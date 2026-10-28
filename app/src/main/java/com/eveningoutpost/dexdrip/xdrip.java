@@ -81,6 +81,7 @@ public class xdrip extends Application {
     public void onCreate() {
         xdrip.context = getApplicationContext();
         super.onCreate();
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES); // Material3 dark theme only
         JodaTimeAndroid.init(this);
         try {
             if (PreferenceManager.getDefaultSharedPreferences(xdrip.context).getBoolean("enable_crashlytics", true)) {
