@@ -20,7 +20,7 @@ Last updated: 2026-10-28
 |---|---|---|
 | 0. Foundation (deps + baseline) | **Done** (build + unit tests pass; emulator smoke test OK: Snackbar, Reminders FAB) | `redesign/phase-0-foundation` |
 | 1. Tokens | **Done** (`xd_*` colors + dimens added, resources compile; nothing uses them yet) | `redesign/phase-1-tokens` |
-| 2. Theme | Todo | - |
+| 2. Theme | **Done** (builds; not verified on emulator) | `redesign/phase-2-theme` |
 | 3. Home layout | Todo (make mock-ups first with `imagegen-frontend-mobile`) | - |
 | 4. Drawer + overflow menu | Todo | - |
 | 5. Dialogs | Todo | - |
@@ -28,6 +28,14 @@ Last updated: 2026-10-28
 | 7. Secondary screens | Todo | - |
 | 8. Graph, widgets, notifications | Todo | - |
 | 9. Wear | Later | - |
+
+### Phase 2 result
+- `AppTheme` now extends `Theme.Material3.Dark` (with action bar, because Home, Reminders, ProfileEditor and others use the support ActionBar), mapped to `xd_*` tokens; window, status and navigation bars are `xd_bg`. Old `colorPrimary/Dark/Accent` resources kept.
+- `AppThemeToolBarLite` (set via `setTheme` in Home, Reminders, InstallPebbleWatchFace) now extends `AppTheme` with the action bar disabled. `AppThemeReference`, `AppThemeToolBar`, `StatisticsWhiteTheme`, `PopUpKeypad`, `OldAppTheme*`, showcase themes untouched.
+- `xdrip.onCreate` forces `MODE_NIGHT_YES`.
+- `holo_background` drawable is no longer used by the theme (left in place).
+- `assembleFastDebug` passes. Unit tests: 926 run, 3 fail (`GlucoseDataTest` mmol tests, decimal-comma locale of the dev machine, unrelated to theme).
+- NOT verified: no emulator run. Eyeball Home (toolbar, snackbar), Reminders FAB, settings screens, dialogs, emergency assist (`activity_emergency_assist.xml`), mega status, and any layout with a `Button` that sets `android:background` (loses Material styling). No layouts were edited.
 
 ### Phase 0 result
 `app/build.gradle` bumps (wear module untouched):
